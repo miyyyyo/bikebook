@@ -17,7 +17,7 @@ COPY . .
 RUN npm run build
 
 # Expose the port that Next.js will run on
-EXPOSE 8080
+EXPOSE 80
 
 # Start the Next.js application when the container starts
 CMD ["npm", "start"]
