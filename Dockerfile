@@ -1,23 +1,23 @@
-# Entorno o runtime, en este caso Node v.20
+# Use the official Node.js 14 image as the base image
 FROM node:20
 
-# Directorio de trabajo
+# Set the working directory in the container
 WORKDIR /app
 
-# Copiamos package.json y package-lock.json al contenedor
+# Copy package.json and package-lock.json to the container
 COPY package*.json ./
 
-# Instalamos dependencias
+# Install dependencies
 RUN npm install
 
-# Copiamos el resto del código a nuestro contenedor
+# Copy the rest of the application code to the container
 COPY . .
 
-# Ejecutamos el comando “build” para crear una versión de producción
+# Build the Next.js application
 RUN npm run build
 
-# Exponemos el puerto en el que normalmente trabaja Nextjs
-EXPOSE 3000
+# Expose the port that Next.js will run on
+EXPOSE 80
 
-# Ejecutamos la versión de producción de nuestra app
+# Start the Next.js application when the container starts
 CMD ["npm", "start"]

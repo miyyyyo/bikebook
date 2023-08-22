@@ -1,7 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWhatsapp, faFacebook, faTwitter, faLinkedin, faPinterest, faReddit, faTelegram } from '@fortawesome/free-brands-svg-icons';
 
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
+import { faCopy } from '@fortawesome/free-solid-svg-icons';
 
 interface ShareButtonsProps {
     url: string
@@ -11,11 +12,13 @@ interface ShareButtonsProps {
 
 const ShareButtons: FunctionComponent<ShareButtonsProps> = ({ url, title }) => {
 
+    const [copySuccess, setCopySuccess] = useState<boolean>(false)
+
     const encodedUrl = encodeURIComponent(url);
     const encodedTitle = encodeURIComponent(title);
 
     const shareLinks = [
-        { platform: 'WhatsApp', url: `https://api.whatsapp.com/send?text=${encodedTitle}%20${encodedUrl}`, icon: faWhatsapp, color: '#25D366' },
+        { platform: 'WhatsApp', url: `https://wa.me/?text=${encodedUrl}%20${encodedTitle}`, icon: faWhatsapp, color: '#25D366' },
         { platform: 'Facebook', url: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`, icon: faFacebook, color: '#3b5998' },
         { platform: 'Twitter', url: `https://twitter.com/share?url=${encodedUrl}&text=${encodedTitle}`, icon: faTwitter, color: '#1DA1F2' },
         { platform: 'LinkedIn', url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`, icon: faLinkedin, color: '#0077b5' },
@@ -37,6 +40,20 @@ const ShareButtons: FunctionComponent<ShareButtonsProps> = ({ url, title }) => {
                     </a>
                 </li>
             ))}
+            <button
+                type="button"
+                className="w-5"
+                onClick={() => {
+                    navigator.clipboard.writeText(url);
+                    setCopySuccess(true)
+                    setTimeout(() => {
+                        setCopySuccess(false)
+                    }, 1000);
+                }}
+            >
+                <FontAwesomeIcon icon={faCopy} className='text-slate-500' />
+                {copySuccess && <span className={`ml-2 text-xs`}>Copiado!</span>}
+            </button>
         </ul>
     )
 }

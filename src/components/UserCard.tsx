@@ -1,6 +1,9 @@
 import Image from "next/image";
 import { FunctionComponent } from "react";
-import { useSession, signIn, signOut } from "next-auth/react"
+import { useSession, signOut } from "next-auth/react"
+import { useRouter } from "next/router";
+import Link from "next/link";
+import ProfilePicture from "./ProfilePicture";
 
 interface UserCardProps {
     imageSrc: string;
@@ -11,6 +14,7 @@ interface UserCardProps {
 const UserCard: FunctionComponent<UserCardProps> = ({ imageSrc, name, description }) => {
 
     const { data: session, status } = useSession()
+    const router = useRouter()
 
     if (status === "loading") {
         return (
@@ -25,16 +29,13 @@ const UserCard: FunctionComponent<UserCardProps> = ({ imageSrc, name, descriptio
             <div className="min-w-full mb-8">
 
                 <div className="bg-white shadow-md rounded p-4 flex flex-col items-center mb-4">
-                    <Image
-                        src={session.user.image || imageSrc}
-                        width={128}
-                        height={128}
-                        alt={`${name}'s Avatar`}
-                        className="w-16 h-16 object-cover rounded-full mb-4 md:mb-0"
-                    />
+                    <Link href="/perfil">
+                        <ProfilePicture username={session.user.email as string} />
+                    </Link>
                     <div className="text-center">
                         <p className="font-bold">{session.user.name}</p>
                         <p className="italic">{session.user.email}</p>
+                        <button type="button" onClick={() => signOut()} className="text-sm">Cerrar Sesión</button>
                     </div>
                 </div>
             </div>
@@ -53,7 +54,7 @@ const UserCard: FunctionComponent<UserCardProps> = ({ imageSrc, name, descriptio
                     className="w-16 h-16 object-cover rounded-full mb-4 md:mb-0"
                 />
                 <div className="text-center">
-                    <button type="button" onClick={() => signIn()} className="font-bold">Iniciar Sesión</button>
+                    <button type="button" onClick={() => router.push('/login')} className="font-bold">Iniciar Sesión</button>
                 </div>
             </div>
         </div>

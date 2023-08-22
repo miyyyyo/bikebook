@@ -3,6 +3,7 @@ import { TimeLineModel } from "../../../db/models";
 import type { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "../../../db/dbConnect";
 import { TimelineFormInputs } from "@/types";
+import { createSlug, getTimelineKeyWords } from "@/utils/formHelpers";
 
 export default async function handler(
   req: NextApiRequest,
@@ -12,14 +13,13 @@ export default async function handler(
 
   if (req.method === "GET") {
     const { tags, page } = req.query;
-
-    // Calculate the skip value based on the page number and the number of items per page (e.g., 10)
     const perPage = 10;
     const skip = page ? parseInt(page as string) * perPage : 0;
 
     if (tags) {
       const tagsArray = Array.isArray(tags) ? tags : [tags];
       const regexPatterns = tagsArray.map((tag) => new RegExp(`^${tag}`, "i"));
+
       const response = await TimeLineModel.find({
         tags: { $in: regexPatterns },
       })
@@ -27,6 +27,7 @@ export default async function handler(
         .skip(skip)
         .limit(perPage)
         .lean();
+
       res.status(200).json(response);
     } else {
       const response = await TimeLineModel.find({})
@@ -37,13 +38,29 @@ export default async function handler(
       res.status(200).json(response);
     }
   } else if (req.method === "POST") {
-    const { mainText, photo, length, tags } = JSON.parse(req.body) as TimelineFormInputs;
+    const { mainText, photo, length, tags, authorId, authorName, links } =
+      JSON.parse(req.body) as TimelineFormInputs;
+
+    let slug = createSlug(getTimelineKeyWords(JSON.parse(req.body), 35));
+
+    let counter = 1;
+    while (await TimeLineModel.exists({ urlSlug: slug })) {
+      slug =
+        createSlug(getTimelineKeyWords(JSON.parse(req.body), 35)) +
+        "-" +
+        counter;
+      counter++;
+    }
 
     const timeline = new TimeLineModel({
       mainText: mainText || "",
       photo: photo,
       length: length,
       tags: tags,
+      links: links,
+      authorId: authorId,
+      authorName: authorName,
+      urlSlug: slug,
     });
 
     await timeline.save();

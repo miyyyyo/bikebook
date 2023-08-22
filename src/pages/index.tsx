@@ -4,14 +4,12 @@ import dbConnect from '@/db/dbConnect'
 import { TimeLineModel } from '@/db/models'
 import { TimelineFormInputs } from '@/types'
 import { GetServerSideProps } from 'next'
-import Link from 'next/link'
 import { ChangeEvent, FunctionComponent, useEffect, useState } from 'react'
 import { debounce } from 'lodash'
 import TimelineForm from '@/components/TimelineForm'
 import { useInfiniteQuery } from 'react-query';
 import { getTimelines } from '@/utils/getTimelines'
 import CategoriesList from '@/components/CategoriesList'
-
 
 interface MainboardProps {
   timelineData: TimelineFormInputs[];
@@ -80,14 +78,10 @@ const Mainboard: FunctionComponent = () => {
 
   return (
     <>
-      <div className="border flex justify-center items-center">
-        <Link className="text-xs" href="/">Volver</Link>
-        <h1 className="text-xl text-center font-bold m-4">Todas las publicaciones</h1>
-      </div>
       <UserCard
-        imageSrc="https://randomuser.me/api/portraits/men/5.jpg"
-        name="Juan Silva"
-        description="Ciclista Amateur"
+        imageSrc="/noprofile.png"
+        name="Anonimo"
+        description="Sin descripcion"
       />
       <div className="text-center max-w-[850px] mx-auto flex flex-col mb-4">
         <input placeholder="Buscar por categoría" className="border rounded p-2 mb-4" type="text" onChange={handleSearchBar} />
@@ -108,6 +102,9 @@ const Mainboard: FunctionComponent = () => {
                 length={e.length}
                 timeline={e.photo}
                 createdAt={e.createdAt}
+                authorId={e.authorId}
+                authorName={e.authorName}
+                links={e.links}
               />
             </div>
           ))
@@ -125,6 +122,9 @@ const Mainboard: FunctionComponent = () => {
                     length={e.length}
                     timeline={e.photo}
                     createdAt={e.createdAt}
+                    authorId={e.authorId}
+                    authorName={e.authorName}
+                    links={e.links}
                   />
                 </div>
               ))
@@ -163,7 +163,10 @@ export const getServerSideProps: GetServerSideProps<MainboardProps> = async () =
       length: item.length,
       photo: item.photo,
       createdAt: item.createdAt.toISOString(),
-      tags: item.tags || []
+      tags: item.tags || [],
+      authorId: item.authorId || '',
+      authorName: item.authorName || '',
+      links: item.links,
     }));
 
     return {
