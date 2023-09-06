@@ -83,7 +83,7 @@ const Mainboard: FunctionComponent = () => {
         name="Anonimo"
         description="Sin descripcion"
       />
-      <div className="text-center max-w-[850px] mx-auto flex flex-col mb-4">
+      <div className="text-center max-w-[850px] mx-auto flex flex-col mb-4 min-h-[200px]">
         <input placeholder="Buscar por categoría" className="border rounded p-2 mb-4" type="text" onChange={handleSearchBar} />
         <CategoriesList />
       </div>
