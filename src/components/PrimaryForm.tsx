@@ -209,12 +209,12 @@ const PrimaryForm = () => {
                 </div>
                 <textarea {...register("mainText")} placeholder="Escribe algo acá" className='w-full p-2 placeholder:text-2xl' />
             </div>
-            <div className={`border-t-2 p-4 ${moduleOpen() ? "min-h-48" : "h-1/3"}`}>
+            <div className={`border-t-2 p-4 bg-stone-100 ${moduleOpen() ? "min-h-48" : "h-1/3"}`}>
 
                 <div className=" flex gap-4">
                     <div >
                         <button className="h-8" onClick={handleInputActivation}>
-                            <FontAwesomeIcon className="h-full text-blue-600 cursor-pointer hover:text-blue-500 transition-all" icon={faCamera} />
+                            <FontAwesomeIcon className="h-full text-orange-600 cursor-pointer hover:text-orange-500 transition-all" icon={faCamera} />
                         </button>
                         <input
                             accept="image/png, image/jpeg, video/mp4"
@@ -230,18 +230,18 @@ const PrimaryForm = () => {
                     </div>
                     <div  >
                         <button className="h-8 " onClick={(e) => { e.preventDefault(); toggleOpenModule("tags") }}>
-                            <FontAwesomeIcon className={`h-full cursor-pointer hover:text-blue-500 transition-all ${tagInputVisibility ? "text-blue-900" : "text-blue-600"} `} icon={faTag} />
+                            <FontAwesomeIcon className={`h-full cursor-pointer hover:text-orange-500 transition-all ${tagInputVisibility ? "text-orange-900" : "text-orange-600"} `} icon={faTag} />
                         </button>
                     </div>
                     <div  >
                         <button className="h-8 " onClick={(e) => { e.preventDefault(); toggleOpenModule("links") }}>
-                            <FontAwesomeIcon className="h-full text-blue-600 cursor-pointer hover:text-blue-500 transition-all " icon={faLink} />
+                            <FontAwesomeIcon className="h-full text-orange-600 cursor-pointer hover:text-orange-500 transition-all " icon={faLink} />
                         </button>
                     </div>
 
                     <div className="ml-auto mr-4" >
                         <button className="h-8 " disabled={submitBtnDisabled} type="submit">
-                            <FontAwesomeIcon className="h-full text-blue-600 cursor-pointer hover:text-blue-500 transition-all " icon={faPaperPlane} />
+                            <FontAwesomeIcon className="h-full text-orange-600 cursor-pointer hover:text-orange-500 transition-all " icon={faPaperPlane} />
                         </button>
                     </div>
                 </div>
