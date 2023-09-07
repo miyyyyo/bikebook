@@ -20,7 +20,7 @@ const Ad: React.FC = () => {
     return (
         <>
             {showAds ?
-                <div className="mx-2">
+                <div className="mx-2 h-[200px] ">
                     <>
                         <Adsense
                             client="ca-pub-2371684572387469"
