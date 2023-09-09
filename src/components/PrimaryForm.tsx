@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form"
 import Image from "next/image";
 import { createDataObject, createPhotoData, handleCaptionChange, handleDeleteImage, handleFileChange, sendData, uploadImages } from "../utils/formHelpers";
 import useOptimisticUpdate from "@/hooks/useOptimisticUpdate"
-import { useMutation, useQueryClient } from "react-query"
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 const PrimaryForm = () => {
 
@@ -62,7 +62,7 @@ const PrimaryForm = () => {
                 const currentData = queryClient.getQueryData<{
                     pages: TimelineFormInputs[][];
                     pageParams: any[];
-                }>("timelines") || { pages: [], pageParams: [] };
+                }>(["timelines"]) || { pages: [], pageParams: [] };
 
                 const response = await data.json()
 
@@ -81,7 +81,7 @@ const PrimaryForm = () => {
                 queryClient.setQueryData<{
                     pages: TimelineFormInputs[][];
                     pageParams: any[];
-                }>("timelines", {
+                }>(["timelines"], {
                     ...currentData,
                     pages: [
                         [newPayload, ...currentData.pages[0].slice(1)],
@@ -193,7 +193,7 @@ const PrimaryForm = () => {
             await mutation.mutateAsync({ data: processedData, urls: images });
         } catch (err) {
             if (previousData) {
-                queryClient.setQueryData<{ pages: TimelineFormInputs[][], pageParams: any[] }>('timelines', previousData);
+                queryClient.setQueryData<{ pages: TimelineFormInputs[][], pageParams: any[] }>(["timelines"], previousData);
             }
             throw err;
         }

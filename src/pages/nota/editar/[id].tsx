@@ -4,7 +4,7 @@ import Image from "next/image";
 import { InputItem, TimeLineEntryData, TimelineFormInputs } from "@/types";
 import PhotoInput from "@/components/PhotoInput";
 import { editData, handleFileAdding, uploadImages } from "@/utils/formHelpers";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import Link from "next/link";
@@ -81,8 +81,8 @@ const Edit = () => {
 
                 router.push('/');
 
-                await queryClient.cancelQueries('timelines');
-                const previousTimelines = queryClient.getQueryData<TimelineFormInputs[]>(['timelines']);
+                await queryClient.cancelQueries(["timelines"]);
+                const previousTimelines = queryClient.getQueryData<TimelineFormInputs[]>(["timelines"]);
                 const newTimelineData: Omit<TimelineFormInputs, "createdAt"> = {
                     ...data,
                     _id: id as string,
@@ -96,7 +96,7 @@ const Edit = () => {
                     ],
                     length: data.length + urls.length,
                 };
-                queryClient.setQueryData<PaginatedQueryData<Omit<TimelineFormInputs, "createdAt">>>(['timelines'], (old) => {
+                queryClient.setQueryData<PaginatedQueryData<Omit<TimelineFormInputs, "createdAt">>>(["timelines"], (old) => {
                     if (old && Array.isArray(old.pages)) {
                         return {
                             ...old,

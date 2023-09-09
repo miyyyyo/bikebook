@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { FunctionComponent } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery } from "@tanstack/react-query";
 
 interface ProfilePictureProps {
     username: string;

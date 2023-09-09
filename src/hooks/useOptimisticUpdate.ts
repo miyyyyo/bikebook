@@ -1,4 +1,4 @@
-import { useQueryClient } from "react-query";
+import { useQueryClient } from '@tanstack/react-query';
 import { InputItem, TimeLineEntryData, TimelineFormInputs } from "@/types";
 import { getCurrentDateTimeString } from "@/utils/formHelpers";
 import { Session } from "next-auth";
@@ -21,12 +21,12 @@ const useOptimisticUpdate = (
   const queryClient = useQueryClient();
 
   return ({ data, images }: OptimisticUpdateParams) => {
-    queryClient.cancelQueries("timelines");
+    queryClient.cancelQueries(["timelines"]);
 
     const currentData = queryClient.getQueryData<{
       pages: TimelineFormInputs[][];
       pageParams: any[];
-    }>("timelines");
+    }>(["timelines"]);
 
     const currentPhotos: TimeLineEntryData[] = images.map(
       (image, photoIdx: number) => {
@@ -55,7 +55,7 @@ const useOptimisticUpdate = (
       queryClient.setQueryData<{
         pages: TimelineFormInputs[][];
         pageParams: any[];
-      }>("timelines", {
+      }>(["timelines"], {
         ...currentData,
         pages: [
           [newData, ...currentData.pages[0]],

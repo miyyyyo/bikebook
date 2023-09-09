@@ -1,5 +1,5 @@
 import { useSession } from 'next-auth/react';
-import { useQuery } from 'react-query';
+import { useQuery } from "@tanstack/react-query";
 import { Adsense } from '@ctrl/react-adsense';
 
 const Ad: React.FC = () => {
@@ -11,7 +11,7 @@ const Ad: React.FC = () => {
         return response.json();
     };
 
-    const { data: adsVisibilityData, isLoading } = useQuery('adsVisibility', fetchAdsVisibility);
+    const { data: adsVisibilityData, isLoading } = useQuery(["adsVisibility"], fetchAdsVisibility);
 
     const showAds = adsVisibilityData ? !adsVisibilityData.disableAds : true;
 

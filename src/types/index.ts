@@ -56,26 +56,15 @@ export interface User {
 // SOCKETS
 
 export type SocketContextType = {
-  call: CallType;
-  callAccepted: boolean;
-  myVideo: any;
-  userVideo: any;
-  stream: any;
   name: string;
   setName: (name: string) => void;
-  callEnded: boolean;
-  me: string;
-  callRoom: () => void;
-  leaveCall: () => void;
-  answerCall: () => void;
   usersInRoom: UserInRoom[];
   messages: ChatMessage[];
   message: string;
   sendMessage: () => void;
   setMessage: (message: string) => void;
-  toggleCamera: () => void;
-  cameraIsOpen: boolean;
   setRoomName: Dispatch<SetStateAction<string | null>>;
+  roomName: string | null;
 };
 
 export type ContextProviderProps = {

@@ -1,25 +1,23 @@
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
-import VideocallPage from '../../components/VideoCallPage'
-import { ContextProvider } from '@/hooks/VideoCallContext';
+import React from 'react';
+import dynamic from 'next/dynamic';
+
+const VideoCallPage = dynamic(() => import('@/components/VideoCallPage'), {
+    loading: () => <p>Loading...</p>,
+    ssr: false
+});
+
+const DynamicContextProvider = dynamic(() => import('@/context/VideoCallContext').then(mod => mod.ContextProvider), {
+    loading: () => <p className="m-4 text-xl">Cargando...</p>,
+    ssr: false
+});
 
 const VideoCall = () => {
-
-    const router = useRouter();
-    const roomId = router.query.id;
-    const { data: session } = useSession()
-
-    if (!roomId && !session) {
-        return <p>Cargando...</p>;
-    }
-
     return (
-        <div>
-            <ContextProvider>
-                <VideocallPage roomId={roomId as string} session={session!} />
-            </ContextProvider>
-        </div>
-    )
+        <DynamicContextProvider>
+            <VideoCallPage />
+        </DynamicContextProvider>
+    );
 }
 
-export default VideoCall
+export default VideoCall;
+

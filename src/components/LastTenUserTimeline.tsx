@@ -2,7 +2,7 @@ import { InputItem, TimelineFormInputs } from '@/types'
 import formatDateString from '@/utils/formatDateString'
 import { CldImage } from 'next-cloudinary'
 import { FunctionComponent } from 'react'
-import { useQuery } from 'react-query'
+import { useQuery } from "@tanstack/react-query"
 
 interface LastTenUserTimelineProps {
     username: string

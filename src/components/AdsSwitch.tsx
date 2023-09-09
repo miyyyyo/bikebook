@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSession } from 'next-auth/react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const AdsSwitch: React.FC = () => {
 
@@ -13,7 +13,7 @@ const AdsSwitch: React.FC = () => {
         return response.json();
     };
 
-    const { data: adsVisibilityData, isLoading } = useQuery('adsVisibility', fetchAdsVisibility);
+    const { data: adsVisibilityData, isLoading } = useQuery(["adsVisibility"], fetchAdsVisibility);
 
     const showAds = adsVisibilityData ? !adsVisibilityData.disableAds : true;
 
@@ -33,7 +33,7 @@ const AdsSwitch: React.FC = () => {
         return response.json();
     }, {
         onSuccess: () => {
-            queryClient.invalidateQueries('adsVisibility'); // Refetch after successful mutation
+            queryClient.invalidateQueries(["adsVisibility"]); // Refetch after successful mutation
         }
     });
 

@@ -10,7 +10,7 @@ import { faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import Swal from 'sweetalert2';
-import { useQueryClient } from "react-query";
+import { useQueryClient } from '@tanstack/react-query';
 import IFrame from "./Iframe";
 import { isYtUrl, extractVideoId, extractTimestamp } from "@/utils/isYtUrl";
 import YouTubePlayer from "./YoutubePlayer";
@@ -45,7 +45,7 @@ const TimeLine: FunctionComponent<TimeLineProps> = ({ timeline, length, mainText
                 if (response.ok) {
                     const data = await response.json();
 
-                    queryClient.invalidateQueries('timelines');
+                    queryClient.invalidateQueries(['timelines']);
 
                     Swal.fire({
                         title: "Publicación borrada",

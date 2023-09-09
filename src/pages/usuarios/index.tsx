@@ -1,9 +1,9 @@
-// import { faVideo } from "@fortawesome/free-solid-svg-icons";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faVideo } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useQuery } from "react-query";
+import { useQuery } from '@tanstack/react-query';
 
 interface UserInterface {
     name: string;
@@ -27,7 +27,7 @@ const Usuarios = () => {
         return response.json();
     };
 
-    const { data: users, error, isLoading } = useQuery('users', fetchUsers);
+    const { data: users, error, isLoading } = useQuery(['users'], fetchUsers);
 
     if (isLoading) return (
         <div className="mt-4 bg-white p-6 rounded-lg shadow-md animate-pulse">
@@ -75,13 +75,11 @@ const Usuarios = () => {
 
                                 {/* <Link href="/usuarios/id">Ver publicaciones</Link> */}
 
-
-
-                                {/* {session?.user?.email !== user.email && <div className="">
-                                    <Link href={`/videocall/${(session!.user!.email as string).split('@')[0]}${user.email.split('@')[0]}`}>
+                                {session?.user?.email !== user.email && <div className="">
+                                    <Link href={`/videocall/${(session!.user!.email as string).split('@')[0]}y${user.email.split('@')[0]}`}>
                                         <FontAwesomeIcon icon={faVideo} />
                                     </Link>
-                                </div>} */}
+                                </div>}
 
 
                             </div>

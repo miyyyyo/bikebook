@@ -1,7 +1,7 @@
 import { useSession } from 'next-auth/react';
 import { CldImage } from 'next-cloudinary';
 import React, { FunctionComponent } from 'react'
-import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface UserPhotosProps {
     username: string;

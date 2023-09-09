@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from 'react'
 import ProfilePicture from './ProfilePicture'
 import { signOut, useSession } from 'next-auth/react'
-import { useQueryClient } from 'react-query'
+import { useQueryClient } from "@tanstack/react-query"
 import { uploadImages } from '@/utils/formHelpers'
 import PhotoInput from './PhotoInput'
 import AdsSwitch from './AdsSwitch'
@@ -75,6 +75,11 @@ const ProfileCard = () => {
                 >
                     Cerrar Sesión
                 </button>
+                {/* <div className="mt-4">
+                    <Link href="/videocall" className="text-sm bg-blue-500 text-white py-2 px-5 rounded-md hover:bg-blue-600 transition duration-300">
+                        Iniciar consulta
+                    </Link>
+                </div> */}
                 <div className="mt-4">
                     <Link href="/usuarios" className="text-sm bg-blue-500 text-white py-2 px-5 rounded-md hover:bg-blue-600 transition duration-300">
                         Buscar otros usuarios

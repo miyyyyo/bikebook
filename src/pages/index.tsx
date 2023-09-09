@@ -6,7 +6,7 @@ import { TimelineFormInputs } from '@/types'
 import { GetServerSideProps } from 'next'
 import { ChangeEvent, FunctionComponent, useEffect, useState } from 'react'
 import { debounce } from 'lodash'
-import { QueryClient, dehydrate, useInfiniteQuery } from 'react-query';
+import { QueryClient, dehydrate, useInfiniteQuery } from "@tanstack/react-query";
 import { getTimelines } from '@/utils/getTimelines'
 import CategoriesList from '@/components/CategoriesList'
 import PrimaryForm from '@/components/PrimaryForm'
@@ -21,8 +21,8 @@ const Mainboard: FunctionComponent<MainboardProps> = ({ timelineData }) => {
   const [searchResult, setSearchResult] = useState<TimelineFormInputs[] | null>(null)
 
 const { data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery<TimelineFormInputs[]>(
-  'timelines',
-  ({ pageParam = 0 }) => getTimelines('timelines', pageParam),
+  ["timelines"],
+  ({ pageParam = 0 }) => getTimelines("timelines", pageParam),
   {
     initialData: {
       pages: [timelineData], // Wrapping timelineData in another array
@@ -179,7 +179,7 @@ export const getServerSideProps: GetServerSideProps<MainboardProps> = async () =
       links: item.links,
     }));
 
-    queryClient.setQueryData('timelines', { pages: [timelineData], pageParams: [null] });
+    queryClient.setQueryData(["timelines"], { pages: [timelineData], pageParams: [null] });
 
 
     return {

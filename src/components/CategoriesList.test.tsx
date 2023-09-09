@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { render, screen, act } from '@testing-library/react';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import CategoriesList from './CategoriesList'; // adjust the import path if needed
 import fetchMock from 'jest-fetch-mock';
 import { mockCategories } from '../../moks/getCategoriesResponseMock';

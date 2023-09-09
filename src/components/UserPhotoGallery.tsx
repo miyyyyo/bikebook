@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { useSession } from "next-auth/react"
 import { ChangeEvent, FunctionComponent, useState } from "react"
 import { handleFileAdding, uploadImages } from "@/utils/formHelpers"
-import { useMutation, useQueryClient } from "react-query"
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 const UserPhotoGallery: FunctionComponent = () => {
 
