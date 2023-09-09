@@ -5,7 +5,7 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <script async src={`https://www.googletagmanager.com/gtag/js?id=G-3R9LM83VDP`}></script>
+        {/* <script async src={`https://www.googletagmanager.com/gtag/js?id=G-3R9LM83VDP`}></script>
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -18,7 +18,7 @@ export default function Document() {
         />
 
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2371684572387469"
-          crossOrigin="anonymous"></script>
+          crossOrigin="anonymous"></script> */}
       </Head>
       <body>
         {/* <Ad /> */}
