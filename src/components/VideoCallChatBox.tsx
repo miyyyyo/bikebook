@@ -1,5 +1,6 @@
 import { SocketContext } from '@/context/VideoCallContext';
 import React, { useContext } from 'react'
+import ChatBox from './ChatBox';
 
 const VideoCallChatBox = () => {
 
@@ -13,21 +14,12 @@ const VideoCallChatBox = () => {
 
 
     return (
-        <>
-            <div className="relative">
-                <div className="mt-6 flex flex-col items-center overflow-y-auto justify-center z-0 relative ">
-                    {messages && messages.map((e, i) => {
-                        return (
-                            <p className="bg-white w-full" key={i}>
-                                <strong className="text-blue-500">{e.username}:</strong> {e.message}
-                            </p>
-                        )
-                    })}
-                </div>
+        <div className="flex flex-col h-full">
 
-            </div>
-            <form 
-            className="mt-6 flex items-center w-full justify-center sticky bottom-0"
+            <ChatBox messages={messages} />
+
+            <form
+                className="flex items-center w-full justify-center"
             >
                 <input
                     type="text"
@@ -45,7 +37,7 @@ const VideoCallChatBox = () => {
                     Enviar
                 </button>
             </form>
-        </>
+        </div>
     )
 }
 

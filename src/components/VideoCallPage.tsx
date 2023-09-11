@@ -103,28 +103,27 @@ const VideoCallPage = () => {
     }, [remoteUsers]);
 
     return (
-        <div className="w-full h-screen grid grid-rows-5 grid-cols-3 gap-2">
+        <div className="w-full h-[95vh] grid grid-rows-3 grid-cols-5 gap-2 relative">
 
-            <div className="border-2 col-span-3 row-span-3">
+            <div className="border-2 col-span-5 row-span-2 flex justify-center gap-1">
 
                 {/* Remote Streams */}
                 {remoteUsers.map(user => (
                     <div
                         key={user.uid}
                         id={`video-${user.uid}`}
-                        className="w-full h-full border-2 rounded-md mb-4"
+                        className="h-full w-2/3 md:w-96 rounded-md"
                     ></div>
                 ))}
             </div>
 
-            <div className="border-2 col-span-3 row-span-2 flex">
+            <div className="col-span-5 sm:col-span-4 flex mb-2">
 
-
-                <div className="w-2/3 border-2 p-4 rounded-md mb-4 " >
+                <div className="w-full h-full p-2 rounded-md flex flex-col justify-between " >
 
                     {/* Chat Display */}
-                    <div className="border-2 rounded p-2 sticky top-0 bg-slate-200 flex gap-2 z-20 justify-between">
-                        <div>
+                    <div className="rounded p-2 sticky top-0 bg-slate-200 flex gap-2 z-20 justify-between text-xs sm:text-base">
+                        <div className="hidden md:flex gap-2">
                             {usersInRoom.map(({ name }, index) => (
                                 <div key={index} className="">
                                     <strong className="text-blue-500">{name}</strong>
@@ -143,21 +142,19 @@ const VideoCallPage = () => {
                         </div>
                     </div>
 
-                    <div className="h-[80%] b-4 overflow-y-auto">
+                    <div className="h-full pb-2 flex flex-col">
                         <VideoCallChatBox />
                     </div>
-
                 </div>
 
-                {/* Local Stream */}
-                <div className="w-1/3 border-2 rounded-md mb-4">
-                    <div
-                        ref={localVideoRef}
-                        className="w-full h-full"
-                    ></div>
-                </div>
+            </div>
 
-
+            {/* Local Stream */}
+            <div className="w-24 h-24 row-start-1 col-start-5 absolute right-0 top-0 sm:w-full sm:h-full sm:static sm:row-start-3">
+                <div
+                    ref={localVideoRef}
+                    className="w-full h-full"
+                ></div>
             </div>
         </div>
     );
