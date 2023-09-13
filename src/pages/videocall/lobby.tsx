@@ -71,7 +71,7 @@ const VideoCallLobby = () => {
             </div>
 
             <div className="mt-2 bg-blue-500 w-full text-white text-center py-2 px-4 rounded hover:bg-blue-600 focus:outline-none">
-                <Link href={`/videocall/${(username as string).toLowerCase()}y${(pacient as string).toLowerCase()}?time=${time}`} className="">
+                <Link href={`/videocall/${(username as string)}y${(pacient as string)}?time=${time}`} className="">
                     Proceder a la consulta
                 </Link>
             </div>
