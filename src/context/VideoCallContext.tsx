@@ -47,10 +47,6 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
             }
         }
 
-        setTimeout(() => {
-            router.push("/")
-        }, 1000 * 60 * 2);
-
         return () => {
             if (socket) {
                 socket.off('usersInRoom');
@@ -71,6 +67,7 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
         if (socket && message.trim()) {
             socket.emit('sendMessage', { room: roomName, message, username: name });
             if(roomName){
+                console.log({message})
                 saveChat({room: roomName, newMessage: {message, username: name } })
             }
             setMessage(''); // Clear the input after sending

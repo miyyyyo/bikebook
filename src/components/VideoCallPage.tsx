@@ -15,7 +15,7 @@ const useMicrophoneAndCameraTracks = createMicrophoneAndCameraTracks();
 const VideoCallPage = () => {
 
     const router = useRouter();
-    const channelName = router.query.id as string;
+    const { id: channelName, time } = router.query;
 
     const [inCall, setInCall] = useState(false);
     const [remoteUsers, setRemoteUsers] = useState<IAgoraRTCRemoteUser[]>([]);
@@ -35,9 +35,9 @@ const VideoCallPage = () => {
     const { usersInRoom, setRoomName, roomName } = context
 
     useEffect(() => {
-        setRoomName(channelName)
+        setRoomName(channelName as string)
         if (ready && tracks && !isClientReady) {
-            client.join(config.appid, channelName, null).then(uid => {
+            client.join(config.appid, channelName as string, null).then(uid => {
                 client.publish(tracks);
                 setInCall(true);
                 setIsClientReady(true);  // Set the client as ready after joining
@@ -102,6 +102,23 @@ const VideoCallPage = () => {
         });
     }, [remoteUsers]);
 
+    useEffect(() => {
+        console.log("@conteoRegresivo", { time, timeBool: !!time, timestap: new Date() })
+        setTimeout(() => {
+            router.push("/")
+            console.log("@redireccion", { timestap: new Date() })
+        }, 1000 * 60 * parseInt(time as string) || 2);
+
+        return () => {
+            client.off('user-published', () => null);
+            client.off('user-unpublished', () => null);
+            client.off('disconnected', () => {setIsClientReady(false)});
+        };
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+
     return (
         <div className="w-full h-[95vh] grid grid-rows-3 grid-cols-5 gap-2 relative">
 
@@ -123,7 +140,7 @@ const VideoCallPage = () => {
 
                     {/* Chat Display */}
                     <div className="rounded p-2 sticky top-0 bg-slate-200 flex gap-2 z-20 justify-between text-xs sm:text-base">
-                        <div className="hidden md:flex gap-2">
+                        <div className="hidden  md:flex gap-2">
                             {usersInRoom.map(({ name }, index) => (
                                 <div key={index} className="">
                                     <strong className="text-blue-500">{name}</strong>
