@@ -71,7 +71,7 @@ const TimeLine: FunctionComponent<TimeLineProps> = ({ timeline, length, mainText
     const timeLineUrl = BASE_URL + `/nota/${urlSlug ? urlSlug : _id}`
 
     return (
-        <div className="mb-4 max-w-[850px] mx-auto">
+        <div className="mb-4 max-w-[850px] mx-auto break-all">
             <Head>
                 <HeadMetaTags
                     timeline={timeline}
@@ -83,7 +83,7 @@ const TimeLine: FunctionComponent<TimeLineProps> = ({ timeline, length, mainText
             </Head>
             <div className="bg-white shadow-md rounded-lg py-4">
                 <div className="">
-                    <Ad/>
+                    {/* <Ad/> */}
                 </div>
                 <div className="px-4">
 

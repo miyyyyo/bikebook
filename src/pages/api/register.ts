@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "../../db/dbConnect"; // Adjust the path to your MongoDB connection utility
-import { User, UserModel } from "../../db/models/userModel"; // Adjust the path to your User model
+import { UserModel } from "../../db/models/userModel"; // Adjust the path to your User model
 import bcrypt from "bcrypt";
 
 export default async function handler(
@@ -11,7 +11,9 @@ export default async function handler(
     return res.status(405).end(); // Method Not Allowed
   }
 
-  const { name, email, password } = req.body;
+  const { name, email, password, user_agent_id } = req.body;
+
+  console.log(user_agent_id)
 
   // Input validation (you may want to add more comprehensive checks)
   if (!name || !email || !password) {
@@ -34,7 +36,7 @@ export default async function handler(
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create the user
-    const user = new UserModel({ name, email, password: hashedPassword });
+    const user = new UserModel({ name, email, user_agent_id, password: hashedPassword });
     await user.save();
 
     return res.status(201).json({ message: "Usuario registrado correctamente." });

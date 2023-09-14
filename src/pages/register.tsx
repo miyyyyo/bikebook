@@ -1,3 +1,4 @@
+import { getCookie } from 'cookies-next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -16,10 +17,11 @@ export default function Register() {
         const email = formData.get('email');
         const password = formData.get('password');
         const name = formData.get('name');
+        const user_agent_id = getCookie(`user_agent_id`)
 
         const response = await fetch('/api/register', {
             method: 'POST',
-            body: JSON.stringify({ email, password, name }),
+            body: JSON.stringify({ email, password, name, user_agent_id }),
             headers: {
                 'Content-Type': 'application/json',
             },

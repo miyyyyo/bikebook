@@ -23,6 +23,9 @@ export class User {
   @prop()
   image?: string;
 
+  @prop({ type: [String], default: [] })
+  user_agent_id: string[];
+
   @prop()
   photos?: string[];
 
@@ -32,7 +35,7 @@ export class User {
   @prop({ default: false })
   disableAds?: boolean;
 
-  @prop({ default: 'USER' })
+  @prop({ default: "USER" })
   role?: string;
 
   static async hashPassword(password: string) {
