@@ -62,6 +62,25 @@ export default async function handler(
       console.error("Error updating UserAgent:", error);
       res.status(500).json({ error: "Failed to update userAgent" });
     }
+  } else if (req.method === "GET") {
+    try {
+      await dbConnect();
+
+      const userAgentData = await UserAgentModel.find();
+
+      const users = await UserModel.find({
+        user_agent_id: { $exists: true },
+      }).select("email user_agent_id");
+
+      res.status(200).json({
+        userAgentData,
+        users,
+      });
+      
+    } catch (error) {
+      console.error("Error updating UserAgent:", error);
+      res.status(500).json({ error: "Failed to retrieve userAgent data" });
+    }
   } else {
     res.status(405).json({ error: "Method not allowed" });
   }
