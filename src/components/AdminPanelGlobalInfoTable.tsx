@@ -2,10 +2,16 @@ import { UserAgent, getAggregateData } from '@/utils/adminPanelHelpers';
 import React from 'react';
 
 type GlobalInfoTableProps = {
-  data: UserAgent[]
+  data: UserAgent[];
+  users: {
+    email: string;
+    user_agent_id: string[];
+    createAt: string;
+  }[]
 };
 
-const GlobalInfoTable: React.FC<GlobalInfoTableProps> = ({ data }) => {
+const GlobalInfoTable: React.FC<GlobalInfoTableProps> = ({ data, users }) => {
+
   const {
     totalVisits,
     topThreeEntryPoints,
@@ -24,6 +30,10 @@ const GlobalInfoTable: React.FC<GlobalInfoTableProps> = ({ data }) => {
         <tr>
           <td className="px-6 bg-gray-50 py-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Dispositivos registrados</td>
           <td className="px-6 py-4 ">{data.length}</td>
+        </tr>
+        <tr>
+          <td className="px-6 bg-gray-50 py-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">% Usuarios registrados</td>
+          <td className="px-6 py-4 ">{users.length * 100 / data.length}%</td>
         </tr>
         <tr>
           <td className="px-6 bg-gray-50 py-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Top 3 puntos de entrada</td>
@@ -49,7 +59,7 @@ const GlobalInfoTable: React.FC<GlobalInfoTableProps> = ({ data }) => {
           <td className="px-6 py-4">
             {topThreeOS.map(([osName, count]) => (
               <div key={osName}>
-                {osName ? osName : "Bot" } <span className="font-semibold">({count})</span>
+                {osName ? osName : "Bot"} <span className="font-semibold">({count})</span>
               </div>
             ))}
           </td>

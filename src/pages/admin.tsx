@@ -39,7 +39,7 @@ const Admin: FunctionComponent<AdminPageInterface> = ({ name, email }) => {
             <p>Logueado como {name} ({email})</p>
 
             <div className="mb-12">
-                <GlobalInfoTable data={data.userAgentData} />
+                <GlobalInfoTable data={data.userAgentData} users={data.users} />
             </div>
 
             <div className="mb-12">

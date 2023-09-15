@@ -18,14 +18,14 @@ const ShareButtons: FunctionComponent<ShareButtonsProps> = ({ url, title }) => {
     const encodedTitle = encodeURIComponent(title);
 
     const shareLinks = [
-        { platform: 'WhatsApp', url: `https://wa.me/?text=${encodedUrl}%20${encodedTitle}`, icon: faWhatsapp, color: '#25D366' },
-        { platform: 'Facebook', url: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`, icon: faFacebook, color: '#3b5998' },
-        { platform: 'Twitter', url: `https://twitter.com/share?url=${encodedUrl}&text=${encodedTitle}`, icon: faTwitter, color: '#1DA1F2' },
-        { platform: 'LinkedIn', url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`, icon: faLinkedin, color: '#0077b5' },
-        { platform: 'Pinterest', url: `https://pinterest.com/pin/create/button/?url=${encodedUrl}&media=&description=${encodedTitle}`, icon: faPinterest, color: '#BD081C' },
-        { platform: 'Reddit', url: `https://reddit.com/submit?url=${encodedUrl}&title=${encodedTitle}`, icon: faReddit, color: '#FF5700' },
-        { platform: 'Telegram', url: `https://telegram.me/share/url?url=${encodedUrl}&text=${encodedTitle}`, icon: faTelegram, color: '#0088cc' },
-        { platform: 'Email', url: `mailto:?subject=${encodedTitle}&body=${encodedUrl}`, icon: faTelegram, color: '#D44638' },
+        { platform: 'WhatsApp', url: `https://wa.me/?text=${encodedUrl+"?utm_source=w"}%20${encodedTitle}`, icon: faWhatsapp, color: '#25D366' },
+        { platform: 'Facebook', url: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl+"?utm_source=f"}`, icon: faFacebook, color: '#3b5998' },
+        { platform: 'Twitter', url: `https://twitter.com/share?url=${encodedUrl+"?utm_source=tw"}&text=${encodedTitle}`, icon: faTwitter, color: '#1DA1F2' },
+        { platform: 'LinkedIn', url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl+"?utm_source=l"}`, icon: faLinkedin, color: '#0077b5' },
+        { platform: 'Pinterest', url: `https://pinterest.com/pin/create/button/?url=${encodedUrl+"?utm_source=p"}&media=&description=${encodedTitle}`, icon: faPinterest, color: '#BD081C' },
+        { platform: 'Reddit', url: `https://reddit.com/submit?url=${encodedUrl+"?utm_source=r"}&title=${encodedTitle}`, icon: faReddit, color: '#FF5700' },
+        { platform: 'Telegram', url: `https://telegram.me/share/url?url=${encodedUrl+"?utm_source=t"}&text=${encodedTitle}`, icon: faTelegram, color: '#0088cc' },
+        { platform: 'Email', url: `mailto:?subject=${encodedTitle}&body=${encodedUrl+"?utm_source=e"}`, icon: faTelegram, color: '#D44638' },
 
         // Add other share platforms here
     ];
@@ -46,7 +46,7 @@ const ShareButtons: FunctionComponent<ShareButtonsProps> = ({ url, title }) => {
                     type="button"
                     className="w-5"
                     onClick={() => {
-                        navigator.clipboard.writeText(url);
+                        navigator.clipboard.writeText(url+"?utm_source=cp");
                         setCopySuccess(true)
                         setTimeout(() => {
                             setCopySuccess(false)
