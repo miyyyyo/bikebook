@@ -10,14 +10,21 @@ export default async function handler(
   const room = req.query.room as string;
 
   if (req.method === "GET") {
+    const { limit: limitStr, excludeTimestamps } = req.query;
+
+    const limit = parseInt((limitStr as string) || "10");
+    const excludedTimestamps = (excludeTimestamps as string).split(',').map(ts => new Date(Number(ts)).toISOString());
     const chat = await VideoCallChatModel.findById(room);
 
-    if (chat) {
-      res.status(200).json(chat);
+    if (chat && chat.messages) {
+      const filteredMessages = chat.messages.filter(
+        (msg) => !excludedTimestamps.includes(msg.timestamp)
+      );
+      const lastMessages = filteredMessages.slice(-limit);
+
+      res.status(200).json(lastMessages);
     } else {
-      const newChat = new VideoCallChatModel({ _id: room, messages: [] });
-      await newChat.save();
-      res.status(201).json(newChat);
+      res.status(404).json({ error: "Chat not found" });
     }
   } else if (req.method === "POST") {
     const body = JSON.parse(req.body);

@@ -2,7 +2,7 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 
 const VideoCallPage = dynamic(() => import('@/components/VideoCallPage'), {
-    loading: () => <p>Loading...</p>,
+    loading: () => <p className="m-4 text-xl">Cargando...</p>,
     ssr: false
 });
 

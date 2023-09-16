@@ -65,6 +65,7 @@ export type SocketContextType = {
   setMessage: (message: string) => void;
   setRoomName: Dispatch<SetStateAction<string | null>>;
   roomName: string | null;
+  chatLoaded: boolean;
 };
 
 export type ContextProviderProps = {

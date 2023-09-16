@@ -18,13 +18,13 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
     }
 
     const { data: session } = useSession();
-    const router = useRouter()
 
     const [name, setName] = useState<string>('');
     const [usersInRoom, setUsersInRoom] = useState<UserInRoom[]>([]);
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [message, setMessage] = useState<string>('');
     const [roomName, setRoomName] = useState<string | null>(null);
+    const [chatLoaded, setChatLoaded] = useState<boolean>(false);
 
     useEffect(() => {
         if (socket) {
@@ -37,13 +37,15 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
                 setMessages(roomMessages);
             });
 
-            if ( roomName && session && session.user) {
+            if (roomName && session && session.user) {
                 // Join the room
                 const roomToJoin = roomName; // Replace with your actual room name
                 const userName = session.user.name;   // Replace with the actual user's name
                 socket.emit("joinRoomOnConnect", roomToJoin, userName, () => {
                     console.log(`Joined the room: ${roomToJoin}`);
                 });
+                socket.emit('sendMessage', { room: roomName, message: `${userName} se ha conectado al chat`, username: "ChatBot" })
+                setChatLoaded(true)
             }
         }
 
@@ -51,6 +53,7 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
             if (socket) {
                 socket.off('usersInRoom');
                 socket.off('roomMessages');
+                setChatLoaded(false)
             }
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -66,9 +69,8 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
     const sendMessage = useCallback(() => {
         if (socket && message.trim()) {
             socket.emit('sendMessage', { room: roomName, message, username: name });
-            if(roomName){
-                console.log({message})
-                saveChat({room: roomName, newMessage: {message, username: name } })
+            if (roomName) {
+                saveChat({ room: roomName, newMessage: { message, username: name } })
             }
             setMessage(''); // Clear the input after sending
         }
@@ -84,7 +86,8 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
             message,
             setMessage,
             setRoomName,
-            roomName
+            roomName,
+            chatLoaded
         }}
         >
             {children}

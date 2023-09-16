@@ -103,11 +103,9 @@ const VideoCallPage = () => {
     }, [remoteUsers]);
 
     useEffect(() => {
-        console.log("@conteoRegresivo", { time, timeBool: !!time, timestap: new Date() })
         setTimeout(() => {
             router.push("/")
-            console.log("@redireccion", { timestap: new Date() })
-        }, 1000 * 60 * parseInt(time as string) || 2);
+        }, 1000 * 60 * parseInt(time as string) || 1000 * 60 * 2);
 
         return () => {
             client.off('user-published', () => null);

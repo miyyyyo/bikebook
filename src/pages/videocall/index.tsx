@@ -25,8 +25,6 @@ const Videocall = () => {
             setTime('');
             setPacient('')
         }
-
-        console.log("cargando")
     };
 
     return (

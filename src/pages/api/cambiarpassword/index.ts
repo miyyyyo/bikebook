@@ -1,7 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import dbConnect from "../../db/dbConnect";
-import { UserModel } from "../../db/models/userModel";
+import dbConnect from "../../../db/dbConnect";
+import { UserModel } from "../../../db/models/userModel";
 import bcrypt from "bcrypt";
+import { VerifyCodeModel } from "@/db/models/VerifyCodeModel";
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,9 +12,11 @@ export default async function handler(
     return res.status(405).end(); // Method Not Allowed
   }
 
-  const { email, newPassword } = req.body;
+  const { email, newPassword, mailValidated } = req.body;
 
-  console.log(email, newPassword)
+  if(!mailValidated){
+    return res.status(400).json({ error: "Mail no validado." });
+  }
 
   // Input validation
   if (!email || !newPassword) {
@@ -32,6 +35,8 @@ export default async function handler(
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     existingUser.password = hashedPassword;
     await existingUser.save();
+
+    await VerifyCodeModel.deleteMany({ email: email })
 
     return res.status(200).json({ message: "Contraseña actualizada correctamente." });
   } catch (error) {

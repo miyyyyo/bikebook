@@ -13,6 +13,7 @@ const ChatBox = ({ messages }: { messages: ChatMessage[] }) => {
     return (
         <div className="h-4/5 flex-shrink-0 overflow-y-auto mb-1" ref={chatBoxRef}>
             <div className="flex flex-col items-center justify-center">
+
                 {messages && messages.map((e, i) => {
                     return (
                         <p className="bg-white w-full" key={i}>
