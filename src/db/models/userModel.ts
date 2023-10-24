@@ -6,6 +6,9 @@ import bcrypt from "bcrypt";
   schemaOptions: {
     timestamps: true,
   },
+  options: {
+    allowMixed: 0,
+  },
 })
 export class User {
   @prop({ default: () => nanoid(9) })

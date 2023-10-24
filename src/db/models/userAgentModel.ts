@@ -1,5 +1,10 @@
 import { prop } from "@typegoose/typegoose";
 
+@modelOptions({
+  options: {
+    allowMixed: 0,
+  },
+})
 class Visit {
   @prop()
   timestamp: Date;
