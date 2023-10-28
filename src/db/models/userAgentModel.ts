@@ -1,4 +1,4 @@
-import { prop } from "@typegoose/typegoose";
+import { prop, modelOptions } from "@typegoose/typegoose";
 
 @modelOptions({
   options: {
