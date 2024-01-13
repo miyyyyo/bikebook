@@ -1,6 +1,6 @@
 import { getNextMonth } from "@/utils/ftpHelpers";
-import { debounce } from "lodash";
-import React, { useEffect, useState } from "react";
+import { debounce, isEqual } from "lodash";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Spreadsheet, { Matrix } from "react-spreadsheet";
 
 interface FtpData {
@@ -14,98 +14,84 @@ interface FtpData {
 
 type Status = "Guardado" | "Guardando" | "Error";
 
-const ftpMock = {
-  cols: [
-    "Tipo",
-    "Tiempo",
-    "Distancia",
-    "Velocidad Prom",
-    "Velocidad Max",
-    "Ritmo Cardiaco Prom",
-    "Ritmo Cardiaco Max",
-    "Cadencia Prom",
-    "Cadencia Max",
-    "Potencia Prom",
-    "Potencia Max",
-    "Media W/Kg",
-    "Potencia normalizada",
-    "Peso",
-    "Observaciones/Comentarios",
-  ],
-  rows: [
-    "Enero",
-    "Febrero",
-    "Marzo",
-    "Abril",
-    "Mayo",
-    "Junio",
-    "Julio",
-    "Agosto",
-    "Septiembre",
-    "Octubre",
-    "Noviembre",
-    "Diciembre",
-  ],
-  data: [
-    [
-      { value: "MTB" },
-      { value: "20:00" },
-      { value: "11,16" },
-      { value: "33,4" },
-      { value: "40,4" },
-      { value: "168" },
-      { value: "173" },
-      { value: "74" },
-      { value: "104" },
-      { value: "" },
-      { value: "" },
-      { value: "" },
-      { value: "" },
-      { value: "" },
-      { value: "Comentarios..." },
-    ],
-  ],
-};
-
-const ProfileFtp = () => {
+const ProfileFtp = ({ username }: { username: string }) => {
   const [ftpData, setFtpData] = useState<FtpData | null>();
   const [status, setStatus] = useState<Status | null>();
 
   useEffect(() => {
-    // fetch data and modif as needed and set state
+    const fetchFtp = async () => {
+      try {
+        const response = await fetch(
+          `/api/ftp?username=${encodeURIComponent(username)}`
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.error("Failed to fetch:", error);
+        setStatus("Error");
+      }
+    };
 
-    setFtpData(ftpMock);
-    setStatus("Guardado");
-  }, []);
+    fetchFtp().then((data) => {
+      if (data) {
+        setFtpData(data[0]);
+        setStatus("Guardado");
+      }
+    });
+  }, [username]);
 
-  //   save the data in the db
-  const saveData = debounce(
-    () => {
-      console.log("guardando...");
-    },
-    2000,
-    {
-      leading: true,
-      trailing: false,
-    }
-  );
+  const sendFtpData = () => {
+    if (!ftpData) return;
 
-  //   handle change
-  const handleChange = (
-    data: Matrix<{
-      value: string;
-    }>
-  ) => {
     setStatus("Guardando");
 
-    saveData();
-
-    setTimeout(() => {
-      setStatus("Guardado");
-    }, 2000);
+    fetch(`/api/ftp?username=${username}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, updateData: ftpData }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(() => {
+        setStatus("Guardado");
+      })
+      .catch((error) => {
+        console.error("Failed to send ftp data:", error);
+        setStatus("Error");
+      });
   };
 
-  //   add a new month
+  const handleChange = (data: Matrix<{ value: string }>) => {
+    setStatus("Guardando");
+
+    const newData: FtpData["data"] = data.map((row) =>
+      row.map((cell) => ({
+        value: cell?.value || "",
+      }))
+    );
+
+    if (ftpData) {
+      const newFtpData: FtpData = {
+        cols: ftpData.cols,
+        rows: ftpData.rows,
+        data: newData,
+      };
+
+      setFtpData(newFtpData);
+      // debaunce
+      sendFtpData();
+    }
+  };
+
   const handleAddRow = () => {
     setFtpData((prevFtpData) => {
       if (prevFtpData === null) {
@@ -136,7 +122,9 @@ const ProfileFtp = () => {
           columnLabels={ftpData.cols}
           rowLabels={ftpData.rows}
           onChange={(data) => {
-            handleChange(data);
+            if (!isEqual(data, ftpData.data)) {
+              handleChange(data);
+            }
           }}
         />
       </div>

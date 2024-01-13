@@ -59,7 +59,7 @@ const Profile = () => {
           </div>
           <ProfileCard />
 
-          <ProfileFtp />
+          <ProfileFtp username={session.user.email as string} />
 
           <UserPhotoGallery />
           <div className="mt-6">
