@@ -4,39 +4,58 @@ import { UserModel } from "@/db/models/userModel";
 import { GetServerSideProps } from "next";
 import React, { FunctionComponent, useState } from "react";
 
-interface FtpsProps {
-  usernames: string[];
+interface User {
+  _id: string;
+  email: string;
+  name: string;
 }
 
-const Ftps: FunctionComponent<FtpsProps> = ({ usernames }) => {
-  const [selectedUser, setSelectedUser] = useState(usernames[0]);
+interface FtpsProps {
+  users: User[];
+}
+
+const Ftps: FunctionComponent<FtpsProps> = ({ users }) => {
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   const handleUserChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedUser(event.target.value);
+    if (event.target.value === "") setSelectedUser(null);
+    setSelectedUser(users.find((e) => e.email === event.target.value) as User);
   };
   return (
     <div>
       <h2 className="font-semibold text-2xl p-2 mb-2">
-        Acá puedes ver los FTPs de tus alumnos
+        Acá puedes ver los FTP de tus alumnos
       </h2>
 
       <select
-        value={selectedUser}
+        value={selectedUser?.email || ""}
         onChange={handleUserChange}
         className="p-2 mb-2 ml-2 border text-lg"
       >
-        {usernames.map((username, index) => (
+        <option value="">Elegir</option>
+        {users.map((user, idx) => (
           <option
-            key={index}
-            value={username}
+            key={`useroption_${idx}`}
+            value={user.email}
           >
-            {username}
+            {user.name}
           </option>
         ))}
       </select>
 
       <div>
-        <ProfileFtp username={selectedUser} />
+        {selectedUser ? (
+          <ProfileFtp username={selectedUser.email} />
+        ) : (
+          users.map((user) => {
+            return (
+              <ProfileFtp
+                key={user._id}
+                username={user.email}
+              />
+            );
+          })
+        )}
       </div>
     </div>
   );
@@ -47,9 +66,15 @@ export default Ftps;
 export const getServerSideProps: GetServerSideProps = async () => {
   await dbConnect();
 
-  const users = await UserModel.find({ role: "USER" }).select("email");
+  const users = await UserModel.find({ role: "USER" }).select("_id email name");
 
-  const usernames = users.map((user) => user.email);
+  const usernames = users.map((user) => {
+    return {
+      _id: user.id.toString(),
+      email: user.email,
+      name: user.name,
+    };
+  });
 
   return {
     props: {

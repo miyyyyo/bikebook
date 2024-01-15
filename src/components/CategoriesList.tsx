@@ -63,7 +63,7 @@ const CategoriesList = () => {
               }`}
             >
               <Link
-                className="capitalize py-1 px-2 hover:underline hover:text-gray-600"
+                className="uppercase font-semibold tracking-wide py-1 px-2 hover:underline hover:text-gray-600"
                 href={`/nota/search?tags=${displayValue}`}
               >
                 {displayValue}
