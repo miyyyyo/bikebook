@@ -1,5 +1,5 @@
 import { getNextMonth } from "@/utils/ftpHelpers";
-import { debounce, isEqual, throttle } from "lodash";
+import { isEqual, throttle } from "lodash";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Spreadsheet, { Matrix } from "react-spreadsheet";
 
@@ -61,6 +61,7 @@ const ProfileFtp = ({ username }: { username: string }) => {
       body: JSON.stringify({ username, updateData: currentFtpData }),
     })
       .then((response) => {
+        console.log("User>64", username);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -78,10 +79,11 @@ const ProfileFtp = ({ username }: { username: string }) => {
   const throttledSendFtpData = useCallback(
     throttle(() => {
       if (latestFtpDataRef.current) {
+        console.log("User>L82", username);
         sendFtpData(latestFtpDataRef.current);
       }
     }, 2000),
-    []
+    [username]
   );
 
   const handleChange = (data: Matrix<{ value: string }>) => {
@@ -101,6 +103,7 @@ const ProfileFtp = ({ username }: { username: string }) => {
       };
 
       latestFtpDataRef.current = newFtpData;
+      console.log("User>L104", username);
       throttledSendFtpData();
     }
   };

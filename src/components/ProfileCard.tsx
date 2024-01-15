@@ -101,6 +101,16 @@ const ProfileCard = () => {
             Buscar otros usuarios
           </Link>
         </div>
+        {session && (session as CustomSession).role === "ADMIN" && (
+          <div className="mt-4">
+            <Link
+              href="/ftps"
+              className="text-sm bg-blue-500 text-white py-2 px-5 rounded-md hover:bg-blue-600 transition duration-300"
+            >
+              Ver FTPs
+            </Link>
+          </div>
+        )}
         <div>{(session as CustomSession)?.role && <AdsSwitch />}</div>
       </div>
     </div>

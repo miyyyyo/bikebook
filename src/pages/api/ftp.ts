@@ -66,7 +66,7 @@ export default async function handler(
         const data = await FtpDataModel.find({ username }).lean();
 
         if (data.length === 0) {
-          res.status(200).json(defaultFtpData);
+          res.status(200).json([defaultFtpData]);
         } else {
           res.status(200).json(data);
         }
