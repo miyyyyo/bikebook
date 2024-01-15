@@ -1,5 +1,5 @@
 import { getNextMonth } from "@/utils/ftpHelpers";
-import { debounce, isEqual } from "lodash";
+import { debounce, isEqual, throttle } from "lodash";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Spreadsheet, { Matrix } from "react-spreadsheet";
 
@@ -17,6 +17,11 @@ type Status = "Guardado" | "Guardando" | "Error";
 const ProfileFtp = ({ username }: { username: string }) => {
   const [ftpData, setFtpData] = useState<FtpData | null>();
   const [status, setStatus] = useState<Status | null>();
+  const latestFtpDataRef = useRef(ftpData);
+
+  useEffect(() => {
+    latestFtpDataRef.current = ftpData;
+  }, [ftpData]);
 
   useEffect(() => {
     const fetchFtp = async () => {
@@ -43,8 +48,8 @@ const ProfileFtp = ({ username }: { username: string }) => {
     });
   }, [username]);
 
-  const sendFtpData = () => {
-    if (!ftpData) return;
+  const sendFtpData = (currentFtpData: FtpData) => {
+    if (!currentFtpData) return;
 
     setStatus("Guardando");
 
@@ -53,7 +58,7 @@ const ProfileFtp = ({ username }: { username: string }) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, updateData: ftpData }),
+      body: JSON.stringify({ username, updateData: currentFtpData }),
     })
       .then((response) => {
         if (!response.ok) {
@@ -69,6 +74,15 @@ const ProfileFtp = ({ username }: { username: string }) => {
         setStatus("Error");
       });
   };
+
+  const throttledSendFtpData = useCallback(
+    throttle(() => {
+      if (latestFtpDataRef.current) {
+        sendFtpData(latestFtpDataRef.current);
+      }
+    }, 2000),
+    []
+  );
 
   const handleChange = (data: Matrix<{ value: string }>) => {
     setStatus("Guardando");
@@ -86,9 +100,8 @@ const ProfileFtp = ({ username }: { username: string }) => {
         data: newData,
       };
 
-      setFtpData(newFtpData);
-      // debaunce
-      sendFtpData();
+      latestFtpDataRef.current = newFtpData;
+      throttledSendFtpData();
     }
   };
 
